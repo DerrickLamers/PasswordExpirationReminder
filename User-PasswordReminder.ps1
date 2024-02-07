@@ -68,7 +68,7 @@
     Version:            1.0
 	Author:				Derrick Lamers
 	Creation Date:		1/17/2018
-    Website:            www.lamerscreative.com
+    Website:            www.lamerstech.com
 
 .EXAMPLE
 	.\User-PasswordReminder.ps1
@@ -83,14 +83,14 @@
 #>
 Param (
 	[string]$Path = "C:\TEMP",
-	[string]$SearchBase = "DC=net,DC=yournbs,DC=com",
+	[string]$SearchBase = "DC=net,DC=example,DC=com",
     [int]$RemindAge = 15,
 	[int]$TicketAge = 8,
-	[string]$From = "monitor@yournbs.com",
-	[string]$AdminEmail = "dlamers@yournbs.com",
-    [string]$ReportEmail = "dlamers@yournbs.com",
-    [string]$TicketEmail = "dlamers@yournbs.com",
-	[string]$SMTPServer = "yournbs-com.mail.protection.outlook.com",
+	[string]$From = "",
+	[string]$AdminEmail = "",
+    [string]$ReportEmail = "",
+    [string]$TicketEmail = "",
+	[string]$SMTPServer = "",
     [switch]$TestMode,
     [switch]$OpenTicket,
     [switch]$NoReport,
@@ -152,10 +152,10 @@ function EmailUser
     If( $daysToExpire -le 0 )
     {
  	    # When the Days to Expire is zero, this email header will be sent
-	    $mailmessage.Subject = "Your NBS password expired on " + $User.ExpirationDate
+	    $mailmessage.Subject = "Your password expired on " + $User.ExpirationDate
 	    $mailmessage.Body += "Hi " + $User.Firstname + ","
 	    $mailmessage.Body += " <br /><br />"
-	    $mailmessage.Body += "This email is to inform you that your NBS network password will expired on <font color=red>" + $User.ExpirationDate + " at " + $User.ExpirationTime + "</font>. Access to your computer, email, and other NBS resources will be affected until your password is changed."
+	    $mailmessage.Body += "This email is to inform you that your network password will expired on <font color=red>" + $User.ExpirationDate + " at " + $User.ExpirationTime + "</font>. Access to your computer, email, and other NBS resources will be affected until your password is changed."
     }
     else
     {
@@ -163,15 +163,15 @@ function EmailUser
 	    $mailmessage.Subject = "Your NBS password expires on " + $User.ExpirationDate
 	    $mailmessage.Body += "Hi " + $User.Firstname + ","
 	    $mailmessage.Body += "<br /><br />"
-	    $mailmessage.Body += "This email is to reminder you that your NBS network password will expire on <font color=red>" + $User.ExpirationDate + " at " + $User.ExpirationTime +"</font>. Access to your computer, email, and other NBS resources will be affected if your password is not changed prior to this date."
+	    $mailmessage.Body += "This email is to reminder you that your network password will expire on <font color=red>" + $User.ExpirationDate + " at " + $User.ExpirationTime +"</font>. Access to your computer, email, and other NBS resources will be affected if your password is not changed prior to this date."
     }
 
     # Body of the email sent to users
 	$mailmessage.Body += "<br /><br />"
-	$mailmessage.Body += "If you don't have access to an NBS computer to change your password, please contact <a href='mailto:itsupport@yournbs.com?subject=Need Help Changing My Password'>IT Support</a> and we will be happy to assist you in changing your password."
+	$mailmessage.Body += "If you don't have access to an computer to change your password, please contact <a href='mailto:itsupport@yournbs.com?subject=Need Help Changing My Password'>IT Support</a> and we will be happy to assist you in changing your password."
 	$mailmessage.Body += "<br /><br />"	
 	$mailmessage.Body += "<strong><u>How do I change my password?</u></strong><br /><br />"
-	$mailmessage.Body += "Changing your password is easy and simple but can only be done will working at an NBS office."
+	$mailmessage.Body += "Changing your password is easy and simple but can only be done will working at an office."
 	$mailmessage.Body += "<br /><br /><ol>"
 	$mailmessage.Body += "<li>Login to your computer as normal (Do not login to RDS)</li>"
 	$mailmessage.Body += "<li>Press the <strong>CTRL</strong> + <strong>ALT</strong> + <strong>DELETE</strong> on your keyboard at the same time</li>"
@@ -185,7 +185,7 @@ function EmailUser
 	$mailmessage.Body += "<strong><u>Don't Forget - Update Your Mobile Device(s)</u></strong>"
 	$mailmessage.Body += "<br /><ul>"
 	$mailmessage.Body += "<li>If you have NBS email configured on your mobile device, you will need to update the password within your devices email client.</li>"
-	$mailmessage.Body += "<li>If you contact to the NBS-Mobile network with your mobile device, you may be prompted to provide your new password. If you experience issues connecting to NBS-Mobile after changing your password, it is recommended that you forget the network on your device and reconnect using your username and new password.</li>"
+	$mailmessage.Body += "<li>If you connect to the Mobile network with your mobile device, you may be prompted to provide your new password. If you experience issues connecting to Mobile after changing your password, it is recommended that you forget the network on your device and reconnect using your username and new password.</li>"
 	$mailmessage.Body += "</ul>"
 	$mailmessage.Body += "<strong><u>When changing my password, my computer says it doesn't meet the complexity requirements, what does this mean?</u></strong>"
 	$mailmessage.Body += "<br /><br />"
@@ -196,11 +196,11 @@ function EmailUser
 	$mailmessage.Body += "<li>Must contain at least one number character</li>"
     $mailmessage.Body += "<li>Must contain at least one special character (!, $, #, %)</li>"
     $mailmessage.Body += "<li>Must not be the same as your last 5 NBS passwords</li></ul>"
-	$mailmessage.Body += "If you have any questions or concerns, please contact <a href='mailto:itsupport@yournbs.com?subject=Need Help Changing My Password'>IT Support</a>."
+	$mailmessage.Body += "If you have any questions or concerns, please contact <a href='mailto:itsupport@example.com?subject=Need Help Changing My Password'>IT Support</a>."
     $mailmessage.Body += "<br /><br />"
     $mailmessage.Body += "Sincerely,"
     $mailmessage.Body += "<br /><br />"
-    $mailmessage.Body += "<strong>The NBS IT Support Team</strong>"
+    $mailmessage.Body += "<strong>The IT Support Team</strong>"
 	$mailmessage.Body += "<br /><br />"
 	$mailmessage.Body += "------------------------------------------------------------------"
 	$mailmessage.Body += "<br />"
@@ -216,9 +216,9 @@ function OpenTicket($User)
  	$mailmessage = New-Object system.net.mail.mailmessage 
  	$SmtpClient.Host = $SMTPServer 
  	$mailmessage.From = $User.Email 
-    $mailmessage.To.add("itsupport@yournbs.com")
+    $mailmessage.To.add("itsupport@example.com")
     $mailmessage.IsBodyHtml = $true
-    $mailmessage.Subject = "@@@Your NBS password expires on " + $User.ExpirationDate
+    $mailmessage.Subject = "@@@Your password expires on " + $User.ExpirationDate
     $mailmessage.Body = $OpenTicketMessage
     $smtpclient.Send($mailmessage)
 }
